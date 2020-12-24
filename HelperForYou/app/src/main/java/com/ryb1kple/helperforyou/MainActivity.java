@@ -251,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
             text.setText(i.text);
             date.setText(i.date);
             time.setText(i.time);
-            //sv.addView(view1);
             sv.addView(view1, 2);
         }
 
