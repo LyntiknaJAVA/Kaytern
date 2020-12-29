@@ -26,6 +26,7 @@ import android.widget.VideoView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
@@ -162,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void fonts() {
         Typeface shrift = Typeface.createFromAsset(getAssets(), "fonts/Nunito-Bold.ttf");
-        TextView text = findViewById(R.id.textView);
-        TextView text1 = findViewById(R.id.textView3);
+        TextView text = findViewById(R.id.up);
+        TextView text1 = findViewById(R.id.down);
         text.setTypeface(shrift);
         text1.setTypeface(shrift);
     }
@@ -240,20 +241,62 @@ public class MainActivity extends AppCompatActivity {
         //sv.addView(view1);
         //View parent = findViewById(R.id.deal_parent);
         //View lin_lay = parent.getChild
-        LayoutInflater lay = getLayoutInflater();
-        LinearLayout sv = findViewById (R.id.scroll);
-        for (Deal i:deal) {
+        if (deal.size() == 1) {
+            LayoutInflater lay = getLayoutInflater();
+            LinearLayout sv = findViewById (R.id.scroll);
+            Deal last_child = deal.get(0);
             RelativeLayout view1 = (RelativeLayout) lay.inflate(R.layout.deal_layout, null, false);
             LinearLayout ll = (LinearLayout) view1.getChildAt(0);
             TextView text = (TextView) ll.getChildAt(0);
             TextView date = (TextView) ll.getChildAt(1);
             TextView time = (TextView) ll.getChildAt(2);
-            text.setText(i.text);
-            date.setText(i.date);
-            time.setText(i.time);
-            sv.addView(view1, 2);
+            text.setText(last_child.text);
+            date.setText(last_child.date);
+            time.setText(last_child.time);
+            sv.addView(view1);
         }
-
+        else if (deal.size() > 1) {
+            LayoutInflater lay = getLayoutInflater();
+            LinearLayout sv = findViewById (R.id.scroll);
+            Deal last_child = deal.get(deal.size()-1);
+            Deal pre_last_child = deal.get(deal.size()-2);
+            RelativeLayout view1 = (RelativeLayout) lay.inflate(R.layout.deal_layout, null, false);
+            LinearLayout ll = (LinearLayout) view1.getChildAt(0);
+            TextView text = (TextView) ll.getChildAt(0);
+            TextView date = (TextView) ll.getChildAt(1);
+            TextView time = (TextView) ll.getChildAt(2);
+            text.setText(last_child.text);
+            date.setText(last_child.date);
+            time.setText(last_child.time);
+            if (last_child.date.compareTo(pre_last_child.date) < 0) {
+                sv.addView(view1, 0);
+            }
+            else if (last_child.date.compareTo(pre_last_child.date) > 0) {
+                sv.addView(view1, 1);
+            }
+            else {
+                sv.addView(view1, 0);
+            }
+        }
+        TextView d1 = findViewById(R.id.up);
+        TextView d2 = findViewById(R.id.down);
+        int size = deal.size();
+        if (size == 1) {
+            d1.setText("Отлично, вы добавили первое дело!");
+            d2.setText("Не останавливайтесь на достигнутом!");
+        }
+        else if (size <= 4 && size > 1) {
+            d1.setText("Ух ты, да вы растёте на глазах!");
+            d2.setText("Правильно рассчитывайте время на каждое дело!");
+        }
+        else if (size > 4) {
+            d1.setText("Вы уже занятой человек!");
+            d2.setText("У вас всё получится!");
+        }
+        else {
+            d1.setText("Пока дел нет.");
+            d2.setText("Не будьте беззаботными :)!");
+        }
     }
 
     public void test (View view) {

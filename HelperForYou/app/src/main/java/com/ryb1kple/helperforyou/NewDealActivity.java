@@ -161,8 +161,12 @@ public class NewDealActivity extends Activity {
         TextView tv = (TextView) findViewById(R.id.editTextTextPersonName);
         String text = tv.getText().toString();
 
-        deal.add(new Deal(pickedTime, text, pickedDate));
+        if (text.length() < 1) {
+            Toast.makeText(this, "Введите название дела", Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        deal.add(new Deal(pickedTime, text, pickedDate));
         boolean result = JSONHelper.exportToJSON(this, deal);
         if(result){
             Toast.makeText(this, "Данные сохранены", Toast.LENGTH_LONG).show();
