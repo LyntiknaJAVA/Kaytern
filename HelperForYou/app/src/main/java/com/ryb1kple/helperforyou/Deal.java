@@ -7,6 +7,7 @@ public class Deal {
     String time;
     String date;
     Calendar dateAndTime;
+    boolean completed = false;
     Deal(String time, String text, String date, Calendar dateAndTime){
         this.text = text;
         this.time = time;

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewParent;
@@ -55,13 +56,18 @@ public class MainActivity extends AppCompatActivity {
         set_settings();
         animation_load();
         import_deals();
-
+        hide();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         import_deals();
+    }
+
+    public void hide () {
+        LinearLayout ll = findViewById(R.id.scroll_brother);
+        ll.setVisibility(View.INVISIBLE);
     }
 
     public void animation () {
@@ -345,4 +351,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void delete_deal (View view) {
+        LinearLayout vw = (LinearLayout) view.getParent().getParent().getParent();
+        RelativeLayout vw_1 = (RelativeLayout) view.getParent().getParent().getParent().getParent();
+        String head = ((TextView) vw.getChildAt(0)).getText().toString();
+        LinearLayout sw = findViewById(R.id.scroll);
+        for (int i = 0; i < deal.size(); i++) {
+            if (deal.get(i).text == head) {
+                deal.remove(i);
+                sw.removeView(vw_1);
+                break;
+            }
+        }
+        boolean result = JSONHelper.exportToJSON(this, deal);
+    }
+
+    public void hide_scroll (View view) {
+        LinearLayout scroll = findViewById(R.id.scroll);
+        LinearLayout scroll_brother = findViewById(R.id.scroll_brother);
+        if (scroll.getVisibility() == View.VISIBLE) {
+            scroll.setVisibility(View.INVISIBLE);
+            scroll_brother.setVisibility(View.VISIBLE);
+        }
+        else {
+            scroll_brother.setVisibility(View.INVISIBLE);
+            scroll.setVisibility(View.VISIBLE);
+        }
+    }
 }

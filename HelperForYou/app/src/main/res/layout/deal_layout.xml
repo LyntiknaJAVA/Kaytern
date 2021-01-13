@@ -72,7 +72,8 @@
                     android:layout_width="170dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:background="@drawable/rubbish_icon" />
+                    android:background="@drawable/rubbish_icon"
+                    android:onClick="delete_deal" />
 
                 <Button
                     android:id="@+id/button6"
