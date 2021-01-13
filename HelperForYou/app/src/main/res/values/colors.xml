@@ -8,4 +8,6 @@
     <color name="aqua">#66CDAA</color>
     <color name="red">#DB7093</color>
     <color name="brown">#D2B48C</color>
+    <color name="black">#000000</color>
+    <color name="lite_gray">#E0E0E0</color>
 </resources>

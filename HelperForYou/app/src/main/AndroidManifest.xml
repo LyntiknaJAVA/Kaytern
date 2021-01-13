@@ -10,8 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,6 +22,7 @@
         <activity android:name=".Settings_activity"></activity>
         <activity android:name=".NewDealActivity"></activity>
         <activity android:name=".FullVideoActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

@@ -2,19 +2,25 @@ package com.ryb1kple.helperforyou;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,14 +29,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import org.w3c.dom.Document;
+
 import java.lang.reflect.Array;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
+
 public class MainActivity extends AppCompatActivity {
+
     View view;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -233,65 +248,67 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Deal> deal = new ArrayList<>();
     public void import_deals () {
-        deal = JSONHelper.importFromJSON(this);
-        if (deal == null) {
-            deal = new ArrayList<>();
-        }
-        //View view1 = lay.inflate(R.layout.deal_layout, null, false);
-        //sv.addView(view1);
-        //View parent = findViewById(R.id.deal_parent);
-        //View lin_lay = parent.getChild
-        if (deal.size() == 1) {
-            LayoutInflater lay = getLayoutInflater();
-            LinearLayout sv = findViewById (R.id.scroll);
-            Deal last_child = deal.get(0);
-            RelativeLayout view1 = (RelativeLayout) lay.inflate(R.layout.deal_layout, null, false);
-            LinearLayout ll = (LinearLayout) view1.getChildAt(0);
-            TextView text = (TextView) ll.getChildAt(0);
-            TextView date = (TextView) ll.getChildAt(1);
-            TextView time = (TextView) ll.getChildAt(2);
-            text.setText(last_child.text);
-            date.setText(last_child.date);
-            time.setText(last_child.time);
-            sv.addView(view1);
-        }
-        else if (deal.size() > 1) {
-            LayoutInflater lay = getLayoutInflater();
-            LinearLayout sv = findViewById (R.id.scroll);
-            Deal last_child = deal.get(deal.size()-1);
-            Deal pre_last_child = deal.get(deal.size()-2);
-            RelativeLayout view1 = (RelativeLayout) lay.inflate(R.layout.deal_layout, null, false);
-            LinearLayout ll = (LinearLayout) view1.getChildAt(0);
-            TextView text = (TextView) ll.getChildAt(0);
-            TextView date = (TextView) ll.getChildAt(1);
-            TextView time = (TextView) ll.getChildAt(2);
-            text.setText(last_child.text);
-            date.setText(last_child.date);
-            time.setText(last_child.time);
-            if (last_child.date.compareTo(pre_last_child.date) < 0) {
-                sv.addView(view1, 0);
+            deal = JSONHelper.importFromJSON(this);
+            if (deal == null) {
+                deal = new ArrayList<>();
             }
-            else if (last_child.date.compareTo(pre_last_child.date) > 0) {
-                sv.addView(view1, 1);
+
+            if (deal.size() == 1) {
+                LayoutInflater lay = getLayoutInflater();
+                LinearLayout sv = findViewById (R.id.scroll);
+                sv.removeAllViews();
+                Deal last_child = deal.get(0);
+                RelativeLayout view1 = (RelativeLayout) lay.inflate(R.layout.deal_layout, null, false);
+                LinearLayout ll = (LinearLayout) view1.getChildAt(0);
+                TextView text = (TextView) ll.getChildAt(0);
+                TextView date = (TextView) ll.getChildAt(1);
+                text.setText(last_child.text);
+                date.setText("Вы запланировали это на " + last_child.date + "в" + last_child.time);
+                if (last_child.dateAndTime.get(Calendar.MONTH) == new Date(System.currentTimeMillis()).getMonth()) {
+                    date.setText("Завтра");
+                }
             }
-            else {
-                sv.addView(view1, 0);
+            else if (deal.size() > 1) {
+                LayoutInflater lay = getLayoutInflater();
+                LinearLayout sv = findViewById (R.id.scroll);
+                sv.removeAllViews();
+                for (Deal i:deal) {
+                    RelativeLayout view1 = (RelativeLayout) lay.inflate(R.layout.deal_layout, null, false);
+                    LinearLayout ll = (LinearLayout) view1.getChildAt(0);
+                    TextView text = (TextView) ll.getChildAt(0);
+                    TextView date = (TextView) ll.getChildAt(1);
+                    text.setText(i.text);
+                    date.setText("Вы запланировали это на " + i.date + " в " + i.time);
+                    // Сделать через среду разработки JAVA
+                    if (i.dateAndTime.get(Calendar.MONTH) == new Date(System.currentTimeMillis()).getMonth() && i.dateAndTime.get(Calendar.DATE) == new Date(System.currentTimeMillis()).getDate() ) {
+                        date.setText("Вы запланировали это на завтра в " + i.time);
+                    }
+                    // Сделать через среду разработки JAVA
+                    sv.addView(view1);
+                }
+                //for (Deal i:deal) {
+                //Date date_max = new Date(System.currentTimeMillis());
+                //if (i.dateAndTime.getTime().after(date_max) == true) {
+                // deal.set(0, i);
+                //date_max == i.dateAndTime.getTime();
+                //}
+                //}
             }
-        }
+
         TextView d1 = findViewById(R.id.up);
         TextView d2 = findViewById(R.id.down);
         int size = deal.size();
         if (size == 1) {
-            d1.setText("Отлично, вы добавили первое дело!");
+            d1.setText("Отлично, Вы добавили первое дело!");
             d2.setText("Не останавливайтесь на достигнутом!");
         }
         else if (size <= 4 && size > 1) {
-            d1.setText("Ух ты, да вы растёте на глазах!");
+            d1.setText("Ух ты, да Вы растёте на глазах!");
             d2.setText("Правильно рассчитывайте время на каждое дело!");
         }
         else if (size > 4) {
             d1.setText("Вы уже занятой человек!");
-            d2.setText("У вас всё получится!");
+            d2.setText("У Вас всё получится!");
         }
         else {
             d1.setText("Пока дел нет.");
@@ -311,7 +328,21 @@ public class MainActivity extends AppCompatActivity {
         date.setText("dgdddgdgdgdgg");
         time.setText("ff");
         sv.addView(view1);
+    }
 
+    public void editing_deal (View view) {
+        Intent intent = new Intent(MainActivity.this, NewDealActivity.class);
+        LinearLayout vw = (LinearLayout) view.getParent().getParent().getParent();
+        String head = ((TextView) vw.getChildAt(0)).getText().toString();
+        for (Deal i:deal) {
+            if (i.text == head) {
+                intent.putExtra("text", i.text);
+                intent.putExtra("date", i.date);
+                intent.putExtra("time", i.time);
+                intent.putExtra("dateAndTime", i.dateAndTime);
+                startActivity(intent);
+            }
+        }
     }
 
 }
