@@ -367,8 +367,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void hide_scroll (View view) {
-        LinearLayout scroll = findViewById(R.id.scroll);
-        LinearLayout scroll_brother = findViewById(R.id.scroll_brother);
+        ScrollView scroll = findViewById(R.id.small_brother);
+        ScrollView scroll_brother = findViewById(R.id.big_brother);
         if (scroll.getVisibility() == View.VISIBLE) {
             scroll.setVisibility(View.INVISIBLE);
             scroll_brother.setVisibility(View.VISIBLE);
