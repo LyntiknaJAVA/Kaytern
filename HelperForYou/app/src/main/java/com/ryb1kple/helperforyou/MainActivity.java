@@ -240,14 +240,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void animation_load () {
-        SharedPreferences settings = getSharedPreferences("UI_settings", MODE_PRIVATE);
-        String check = settings.getString("animation", "null");
-        if (check == "on") {
+
             ImageView load_img = (ImageView) findViewById(R.id.load_img);
             load_img.setBackgroundResource(R.drawable.animation_load);
             final AnimationDrawable animation = (AnimationDrawable) load_img.getBackground();
             animation.start();
-        }
+
     }
 
     public List<Deal> deal = new ArrayList<>();
