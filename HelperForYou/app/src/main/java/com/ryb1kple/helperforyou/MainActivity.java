@@ -56,18 +56,12 @@ public class MainActivity extends AppCompatActivity {
         set_settings();
         animation_load();
         import_deals();
-        hide();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         import_deals();
-    }
-
-    public void hide () {
-        LinearLayout ll = findViewById(R.id.scroll_brother);
-        ll.setVisibility(View.INVISIBLE);
     }
 
     public void animation () {
@@ -246,10 +240,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void animation_load () {
-        ImageView load_img = (ImageView) findViewById(R.id.load_img);
-        load_img.setBackgroundResource(R.drawable.animation_load);
-        final AnimationDrawable animation = (AnimationDrawable) load_img.getBackground();
-        animation.start();
+        SharedPreferences settings = getSharedPreferences("UI_settings", MODE_PRIVATE);
+        String check = settings.getString("animation", "null");
+        if (check == "on") {
+            ImageView load_img = (ImageView) findViewById(R.id.load_img);
+            load_img.setBackgroundResource(R.drawable.animation_load);
+            final AnimationDrawable animation = (AnimationDrawable) load_img.getBackground();
+            animation.start();
+        }
     }
 
     public List<Deal> deal = new ArrayList<>();
@@ -366,16 +364,5 @@ public class MainActivity extends AppCompatActivity {
         boolean result = JSONHelper.exportToJSON(this, deal);
     }
 
-    public void hide_scroll (View view) {
-        ScrollView scroll = findViewById(R.id.small_brother);
-        ScrollView scroll_brother = findViewById(R.id.big_brother);
-        if (scroll.getVisibility() == View.VISIBLE) {
-            scroll.setVisibility(View.INVISIBLE);
-            scroll_brother.setVisibility(View.VISIBLE);
-        }
-        else {
-            scroll_brother.setVisibility(View.INVISIBLE);
-            scroll.setVisibility(View.VISIBLE);
-        }
-    }
+
 }

@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.TypeAdapterFactory;
@@ -69,5 +70,38 @@ public class Settings_activity extends Activity {
         TextView tv = (TextView) findViewById(R.id.title);
         Typeface shrift = Typeface.createFromAsset(getAssets(), "fonts/Nunito-ExtraBold.ttf");
         tv.setTypeface(shrift);
+
+        Switch s1 = findViewById(R.id.btn_animation);
+        Switch s2 = findViewById(R.id.autoplay);
+        SharedPreferences new_settings = getSharedPreferences("UI_settings", MODE_PRIVATE);
+        String check = new_settings.getString("animation", "null");
+        String check1 = new_settings.getString("autoplay", "null");
+        if (check == "on") {
+            s1.setChecked(true);
+        }
+        if (check1 == "on") {
+            s2.setChecked(true);
+        }
     }
+
+    public void save_UI_settings (View view) {
+        Switch s1 = findViewById(R.id.btn_animation);
+        Switch s2 = findViewById(R.id.autoplay);
+        SharedPreferences settings = getSharedPreferences("UI_settings", MODE_PRIVATE);
+        SharedPreferences.Editor ed = settings.edit();
+        if (s1.isChecked()) {
+            ed.putString("animation", "on");
+        }
+        else {
+            ed.putString("animation", "off");
+        }
+        if (s2.isChecked()) {
+            ed.putString("autoplay", "on");
+        }
+        else {
+            ed.putString("autoplay", "off");
+        }
+        ed.apply();
+    }
+
 }

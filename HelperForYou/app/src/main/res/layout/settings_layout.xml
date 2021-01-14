@@ -93,7 +93,7 @@
                     />
 
                 <Switch
-                    android:id="@+id/btn_animation1"
+                    android:id="@+id/autoplay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -169,16 +169,21 @@
                     android:id="@+id/textView13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/set1"
-                    />
+                    android:text="@string/set1" />
 
                 <Switch
                     android:id="@+id/btn_animation5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    />
+                    android:layout_alignParentRight="true" />
             </RelativeLayout>
+
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="save_UI_settings"
+                android:text="Button" />
 
         </LinearLayout>
 
